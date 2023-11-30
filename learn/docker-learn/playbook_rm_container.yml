@@ -1,0 +1,22 @@
+- hosts: docker
+  become: true
+
+  tasks:
+  - name: Stop a container
+    docker_container:
+      name: nginx
+      state: stopped
+
+  - name: remove container
+    docker_container:
+      name: nginx
+      state: absent
+
+  - name: check container start
+    shell: docker ps
+    register: docker_is_start
+
+
+  - name: Print
+    debug:
+      msg: "docker ps: {{ docker_is_start.stdout }}"

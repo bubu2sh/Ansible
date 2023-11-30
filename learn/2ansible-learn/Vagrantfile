@@ -1,0 +1,26 @@
+# ####################################################################
+# ################### CONFIGURATION VARIABLES ########################
+# ####################################################################
+IMAGE_NAME = "generic/fedora32"
+MEM = 2048
+CPU = 1
+SLAVE_NBR = 2
+NETWORK_ADAPTER="ens18"
+
+
+Vagrant.configure("2") do |config|
+    config.ssh.insert_key = false
+
+    config.vm.provider "virtualbox" do |v|
+        v.memory = MEM
+        v.cpus = CPU
+    end
+
+    (1..SLAVE_NBR).each do |i|
+        config.vm.define "slave-#{i}" do |slave|
+            slave.vm.box = IMAGE_NAME
+            slave.vm.hostname = "slave-#{i}"
+            slave.vm.network "public_network", bridge: NETWORK_ADAPTER, ip: "192.168.0.6#{i}"
+        end
+    end
+end

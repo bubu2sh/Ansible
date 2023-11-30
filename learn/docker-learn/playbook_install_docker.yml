@@ -1,0 +1,21 @@
+- hosts: docker
+  become: true
+
+  tasks:
+  - name: install requirements
+    apt:
+      name: ["apt-transport-https", "ca-certificates", "curl", "vim", "software-properties-common"]
+      state: present
+      update_cache: yes
+
+  - name: add GPG key
+    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+  - name: add repo
+    shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+  - name: install docker and docker-compose
+    apt:
+      name: ["docker", "docker-compose"]
+      state: present
+      update_cache: yes
